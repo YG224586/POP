@@ -169,9 +169,7 @@ Tab:CreateToggle({
 
 local ResourceNameMap = {
     ["MossPile"] = "苔藓堆",
-    ["MossPileLarge"] = "大苔藓堆",
-    ["Iron"] = "铁",
-    ["Gold"] = "金"
+    ["MossPileLarge"] = "大苔藓堆"
 }
 local function GetResourcesTable()
     local DroppedResources = {}
