@@ -167,12 +167,6 @@ end
 getgenv().Notify = Notify
 
 task.spawn(function()
-    while task.wait(Random.new():NextNumber(5 * 60, 10 * 60)) do
-        Notify("喜欢这个脚本吗？", "加入 Discord: discord.gg/sS3tDP6FSB", "heart")
-    end
-end)
-
-task.spawn(function()
     if ScriptVersion and ScriptVersion ~= "Universal" then
         local PlaceFileName = getgenv().PlaceFileName
 
