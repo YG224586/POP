@@ -445,47 +445,37 @@ function CreateUniversalTabs()
 
     local function IsInGroup(CheckPlayer: Player, GroupId: number)
         local Success, Result = pcall(CheckPlayer.IsInGroup, CheckPlayer, GroupId)
-
         return Success and Result
     end
 
     local function GetRoleInGroup(CheckPlayer: Player, GroupId: number)
         local Success, Result = pcall(CheckPlayer.GetRoleInGroup, CheckPlayer, GroupId)
-
-        return if Success then Result else "访客"
+        return if Success then Result else "Guest"
     end
 
     local function GetRankInGroup(CheckPlayer: Player, GroupId: number)
         local Success, Result = pcall(CheckPlayer.GetRankInGroup, CheckPlayer, GroupId)
-
         return if Success then Result else 0
     end
 
     local function GetStaffRole(CheckPlayer: Player)
         local StaffRole
-
         if IsInGroup(CheckPlayer, 1200769) then
-            StaffRole = "Roblox 管理员"
+            StaffRole = "Roblox Admin"
         end
-
         if game.CreatorType ~= Enum.CreatorType.Group then
             return
         end
-
         local CreatorId = game.CreatorId
-
         local Role = GetRoleInGroup(CheckPlayer, CreatorId)
-
         for _, Name in StaffRoleNames do
             if typeof(Role) == "string" and Role:lower():find(Name) then
                 StaffRole = Role
             end
         end
-
         if GetRankInGroup(CheckPlayer, CreatorId) == 255 then
-            StaffRole = "群组所有者"
+            StaffRole = "Group Owner"
         end
-
         return StaffRole
     end
 
@@ -493,25 +483,22 @@ function CreateUniversalTabs()
         if not Flags.StaffJoin.CurrentValue then
             return
         end
-
         local StaffRole = GetStaffRole(CheckPlayer)
-
         if not StaffRole then
             return
         end
-
         Player:Kick(`检测到玩家 '{CheckPlayer.Name}' 是工作人员，角色为 '{StaffRole}'。\n\n如果你认为这是错误的，请联系 FrostByte 开发者。`)
     end
 
+    -- 默认开启工作人员加入时自动离开
     Tab:CreateToggle({
         Name = "🔔 • 工作人员加入时自动离开",
-        CurrentValue = false,
+        CurrentValue = true, -- 默认开启
         Flag = "StaffJoin",
         Callback = function(Value)
             if not Value then
                 return
             end
-
             for _, CheckPlayer in Players:GetPlayers() do
                 CheckIfStaff(CheckPlayer)
             end
@@ -525,26 +512,21 @@ function CreateUniversalTabs()
     Tab:CreateDivider()
 
     local Connections = {}
-
     local OriginalText = {}
 
     local function HandleUsernameChange(Object: Instance)
         if not Flags.HideName.CurrentValue then
             return
         end
-
         if not Object:IsA("TextLabel") and not Object:IsA("TextBox") and not Object:IsA("TextButton") then
             return
         end
-
         local NameReplacement = Flags.NameReplacement.CurrentValue
-
         if not Connections[Object] then
             Connections[Object] = Object:GetPropertyChangedSignal("Text"):Connect(function()
                 HandleUsernameChange(Object)
             end)
         end
-
         if Object.Text:find(Player.Name) then
             OriginalText[Object] = Object.Text
             Object.Text = Object.Text:gsub(Player.Name, NameReplacement)
@@ -556,43 +538,51 @@ function CreateUniversalTabs()
 
     local DescendantAddedConnection
 
+    -- 默认开启隐藏用户名和显示名
     Tab:CreateToggle({
         Name = "🛡 • 隐藏用户名和显示名 (客户端)",
-        CurrentValue = false,
+        CurrentValue = true, -- 默认开启
         Flag = "HideName",
         Callback = function(Value)
             if Value and not DescendantAddedConnection then
-                for i,v in game:GetDescendants() do
+                for i, v in game:GetDescendants() do
                     HandleUsernameChange(v)
                 end
-
                 DescendantAddedConnection = game.DescendantAdded:Connect(HandleUsernameChange)
-
                 HandleConnection(DescendantAddedConnection, "HideName")
             elseif DescendantAddedConnection then
                 DescendantAddedConnection:Disconnect()
                 DescendantAddedConnection = nil
-
                 for Object: TextLabel?, Text in OriginalText do
                     Object.Text = Text
                 end
-
                 OriginalText = {}
             end
         end,
     })
 
+    -- 随机英文名字生成函数
+    local function GenerateRandomName()
+        local Names = {"Alex", "Ben", "Charlie", "David", "Emma", "Fiona", "Grace", "Hannah"}
+        return Names[math.random(1, #Names)] .. tostring(math.random(100, 999)) -- 随机英文名+3位数字
+    end
+
+    -- 替换名称改为随机英文名字，并默认显示随机值
     Tab:CreateInput({
         Name = "💬 • 替换名称",
-        CurrentValue = "FrostByte",
+        CurrentValue = GenerateRandomName(), -- 默认随机英文名字
         PlaceholderText = "输入新名称",
         RemoveTextAfterFocusLost = false,
         Flag = "NameReplacement",
-        Callback = function()end,
+        Callback = function(Value)
+            if Value == "" then -- 如果用户清空输入，重新生成随机英文名字
+                Flags.NameReplacement:Set(GenerateRandomName())
+            end
+        end,
     })
 
     Tab:CreateDivider()
-
+    
     Tab:CreateToggle({
         Name = "🌀 • 无碰撞",
         CurrentValue = false,
