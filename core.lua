@@ -263,7 +263,7 @@ function CreateUniversalTabs()
     end
 
     local Tab: Tab = Window:CreateTab("客户端", "user")
-
+   
     Tab:CreateSection("Discord")
 
     Tab:CreateButton({
@@ -432,7 +432,7 @@ function CreateUniversalTabs()
         end,
     })
 
-    Tab:CreateSection("安全")
+        Tab:CreateSection("安全")
 
     local StaffRoleNames = {
         "mod",
@@ -491,7 +491,7 @@ function CreateUniversalTabs()
     end
 
     -- 默认开启工作人员加入时自动离开
-    Tab:CreateToggle({
+    local StaffJoinToggle = Tab:CreateToggle({
         Name = "🔔 • 工作人员加入时自动离开",
         CurrentValue = true, -- 默认开启
         Flag = "StaffJoin",
@@ -504,6 +504,7 @@ function CreateUniversalTabs()
             end
         end,
     })
+    if StaffJoinToggle.CurrentValue then task.spawn(StaffJoinToggle.Callback, StaffJoinToggle.CurrentValue) end -- 初始化时触发
 
     HandleConnection(Players.PlayerAdded:Connect(CheckIfStaff), "StaffJoin")
 
@@ -539,7 +540,7 @@ function CreateUniversalTabs()
     local DescendantAddedConnection
 
     -- 默认开启隐藏用户名和显示名
-    Tab:CreateToggle({
+    local HideNameToggle = Tab:CreateToggle({
         Name = "🛡 • 隐藏用户名和显示名 (客户端)",
         CurrentValue = true, -- 默认开启
         Flag = "HideName",
@@ -560,22 +561,23 @@ function CreateUniversalTabs()
             end
         end,
     })
+    if HideNameToggle.CurrentValue then task.spawn(HideNameToggle.Callback, HideNameToggle.CurrentValue) end -- 初始化时触发
 
     -- 随机英文名字生成函数
     local function GenerateRandomName()
         local Names = {"Alex", "Ben", "Charlie", "David", "Emma", "Fiona", "Grace", "Hannah"}
-        return Names[math.random(1, #Names)] .. tostring(math.random(100, 999)) -- 随机英文名+3位数字
+        return Names[math.random(1, #Names)] .. tostring(math.random(100, 999))
     end
 
     -- 替换名称改为随机英文名字，并默认显示随机值
     Tab:CreateInput({
         Name = "💬 • 替换名称",
-        CurrentValue = GenerateRandomName(), -- 默认随机英文名字
+        CurrentValue = GenerateRandomName(),
         PlaceholderText = "输入新名称",
         RemoveTextAfterFocusLost = false,
         Flag = "NameReplacement",
         Callback = function(Value)
-            if Value == "" then -- 如果用户清空输入，重新生成随机英文名字
+            if Value == "" then
                 Flags.NameReplacement:Set(GenerateRandomName())
             end
         end,
