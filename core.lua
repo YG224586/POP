@@ -121,10 +121,6 @@ if getgenv().Flags then
     end
 end
 
-if getgenv().Rayfield then
-    getgenv().Rayfield:Destroy()
-end
-
 local function SendNotification(Title: string, Text: string, Duration: number?, Button1: string?, Button2: string?, Callback: BindableFunction?)
     StarterGui:SetCore("SendNotification", {
         Title = Title,
