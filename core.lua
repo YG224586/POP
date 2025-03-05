@@ -86,27 +86,25 @@ end
 local UnsupportedName = " (执行器不支持)"
 
 local function ApplyUnsupportedName(Name: string, Condition: boolean)
-    return Name..if Condition then "" else UnsupportedName
+    return Name .. if Condition then "" else UnsupportedName
 end
 
 getgenv().ApplyUnsupportedName = ApplyUnsupportedName
 
 if queue_on_teleport then
     queue_on_teleport([[
-    
-    local TeleportService = game:GetService("TeleportService")
-local TeleportData = TeleportService:GetLocalPlayerTeleportData()
+        local TeleportService = game:GetService("TeleportService")
+        local TeleportData = TeleportService:GetLocalPlayerTeleportData()
 
-if not TeleportData then
-    return
-end
+        if not TeleportData then
+            return
+        end
 
-if typeof(TeleportData) == "table" and TeleportData.FrostByteRejoin then
-    return
-end
+        if typeof(TeleportData) == "table" and TeleportData.FrostByteRejoin then
+            return
+        end
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/alyssagithub/Scripts/refs/heads/main/FrostByte/Initiate.lua"))()
-    
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/alyssagithub/Scripts/refs/heads/main/FrostByte/Initiate.lua"))()
     ]])
 end
 
@@ -143,7 +141,7 @@ local function SendNotification(Title: string, Text: string, Duration: number?, 
 end
 
 if not Success or not Rayfield or not Rayfield.CreateWindow then
-    SendNotification("加载 Rayfield 时出错", "尝试重新执行或重新加入。")
+    SendNotification("加载Rayfield时出错", "请尝试重新执行或重新加入游戏。")
     return
 end
 
@@ -178,7 +176,7 @@ task.spawn(function()
 
         local Response = false
 
-        local Button1 = "✅ 是" 
+        local Button1 = "✅ 是"
         local Button2 = "❌ 否"
 
         local File = `https://raw.githubusercontent.com/alyssagithub/Scripts/refs/heads/main/FrostByte/Games/{PlaceFileName}.lua`
@@ -205,7 +203,7 @@ task.spawn(function()
                 continue
             end
 
-            SendNotification(`检测到新的 FrostByte 版本 {Result}！`, "是否加载新版本？", math.huge, Button1, Button2, BindableFunction)
+            SendNotification(`检测到新版本FrostByte {Result}！`, "是否加载新版本？", math.huge, Button1, Button2, BindableFunction)
 
             break
         end
@@ -223,7 +221,7 @@ pcall(function()
     Window = Rayfield:CreateWindow({
         Name = `FrostByte | {PlaceName} | {ScriptVersion or "开发模式"}`,
         Icon = "snowflake",
-        LoadingTitle = "❄ FrostByte 献上的体验 ❄",
+        LoadingTitle = "❄ 由FrostByte献上的体验 ❄",
         LoadingSubtitle = PlaceName,
         Theme = "DarkBlue",
 
@@ -261,7 +259,7 @@ function CreateUniversalTabs()
     Tab:CreateSection("Discord")
 
     Tab:CreateButton({
-        Name = "❄ • 加入 FrostByte Discord！",
+        Name = "❄ • 加入FrostByte Discord！",
         Callback = function()
             if request then
                 request({
@@ -279,7 +277,7 @@ function CreateUniversalTabs()
                 })
             elseif setclipboard then
                 setclipboard("https://discord.gg/sS3tDP6FSB")
-                Notify("成功！", "已将 Discord 链接复制到剪贴板。")
+                Notify("成功！", "已将Discord链接复制到剪贴板。")
             end
 
             Notify("Discord", "https://discord.gg/sS3tDP6FSB")
@@ -288,7 +286,7 @@ function CreateUniversalTabs()
 
     Tab:CreateLabel("https://discord.gg/sS3tDP6FSB", "link")
 
-    Tab:CreateSection("统计")
+    Tab:CreateSection("统计信息")
 
     local PingLabel = Tab:CreateLabel("延迟: 0 毫秒", "wifi")
     local FPSLabel = Tab:CreateLabel("帧率: 0/秒", "monitor")
@@ -305,7 +303,7 @@ function CreateUniversalTabs()
     Tab:CreateSection("防挂机")
 
     Tab:CreateToggle({
-        Name = "🔒 • 防止挂机断开",
+        Name = "🔒 • 防止AFK断开连接",
         CurrentValue = true,
         Flag = "AntiAFK",
         Callback = function()end,
@@ -325,10 +323,10 @@ function CreateUniversalTabs()
     Tab:CreateSection("性能")
 
     Tab:CreateSlider({
-        Name = ApplyUnsupportedName("🎮 • 最大帧率 (0 为无限制)", setfpscap),
+        Name = ApplyUnsupportedName("🎮 • 最大帧率 (0为无限制)", setfpscap),
         Range = {0, 240},
         Increment = 1,
-        Suffix = "帧率",
+        Suffix = "FPS",
         CurrentValue = 0,
         Flag = "MaxFPS",
         Callback = function(Value)
@@ -343,7 +341,7 @@ function CreateUniversalTabs()
     local PreviousValue
 
     Tab:CreateToggle({
-        Name = ApplyUnsupportedName("⬜ • 切出时禁用 3D 渲染", isrbxactive),
+        Name = ApplyUnsupportedName("⬜ • 切出游戏时禁用3D渲染", isrbxactive),
         CurrentValue = false,
         Flag = "Rendering",
         Callback = function(Value)
@@ -404,7 +402,7 @@ function CreateUniversalTabs()
     end), "WalkSpeedCharacterAdded")
 
     Tab:CreateToggle({
-        Name = "⚡ • 启用移动速度修改",
+        Name = "⚡ • 启用移动速度修改器",
         CurrentValue = false,
         Flag = "WalkSpeedChanger",
         Callback = function(Value)
@@ -459,7 +457,7 @@ function CreateUniversalTabs()
         local StaffRole
 
         if IsInGroup(CheckPlayer, 1200769) then
-            StaffRole = "Roblox 管理员"
+            StaffRole = "Roblox管理员"
         end
 
         if game.CreatorType ~= Enum.CreatorType.Group then
@@ -477,7 +475,7 @@ function CreateUniversalTabs()
         end
 
         if GetRankInGroup(CheckPlayer, CreatorId) == 255 then
-            StaffRole = "群组所有者"
+            StaffRole = "群组拥有者"
         end
 
         return StaffRole
@@ -494,11 +492,11 @@ function CreateUniversalTabs()
             return
         end
 
-        Player:Kick(`检测到玩家 '{CheckPlayer.Name}' 是工作人员，角色为 '{StaffRole}'。\n\n如果你认为这是错误的，请联系 FrostByte 开发者。`)
+        Player:Kick(`检测到玩家 '{CheckPlayer.Name}' 为管理员，其角色为 '{StaffRole}'。\n\n如果认为这是误判，请联系FrostByte开发者。`)
     end
 
     Tab:CreateToggle({
-        Name = "🔔 • 工作人员加入时自动离开",
+        Name = "🔔 • 管理员加入时自动离开",
         CurrentValue = false,
         Flag = "StaffJoin",
         Callback = function(Value)
@@ -551,7 +549,7 @@ function CreateUniversalTabs()
     local DescendantAddedConnection
 
     Tab:CreateToggle({
-        Name = "🛡 • 隐藏用户名和显示名 (客户端)",
+        Name = "🛡 • 隐藏用户名和显示名称 (仅客户端)",
         CurrentValue = false,
         Flag = "HideName",
         Callback = function(Value)
@@ -599,11 +597,15 @@ function CreateUniversalTabs()
     Tab:CreateDivider()
 
     Tab:CreateToggle({
-        Name = "🌀 • 无碰撞",
+        Name = "🌀 • 无碰撞模式",
         CurrentValue = false,
         Flag = "Noclip",
         Callback = function(Value)
-            local Character = Player.Character or Player.CharacterAdded:Wait()
+            local Character = Player.Character
+
+            if not Character then
+                return Notify("错误", "你没有角色。")
+            end
 
             for _, Part: Part in Character:GetChildren() do
                 if not Part:IsA("BasePart") then
@@ -620,35 +622,143 @@ function CreateUniversalTabs()
         end,
     })
 
+    Tab:CreateSection("可视化")
+
+    local CoreGui: Folder = game:GetService("CoreGui")
+
+    local function ESP(TargetPlayer: Player)
+        local TargetCharacter = TargetPlayer.Character or TargetPlayer.CharacterAdded:Wait()
+
+        local LocalCharacter = Player.Character
+
+        local FolderName = `{TargetPlayer.Name}_ESP`
+
+        local Holder = Instance.new("Folder")
+        Holder.Name = FolderName
+        Holder.Parent = CoreGui
+
+        for _, Part: Part in TargetCharacter:GetChildren() do
+            if not Part:IsA("BasePart") then
+                continue
+            end
+
+            local BoxHandleAdornment = Instance.new("BoxHandleAdornment")
+            BoxHandleAdornment.Name = TargetPlayer.Name
+            BoxHandleAdornment.Adornee = Part
+            BoxHandleAdornment.AlwaysOnTop = true
+            BoxHandleAdornment.ZIndex = 10
+            BoxHandleAdornment.Size = Part.Size
+            BoxHandleAdornment.Transparency = 0.5
+            BoxHandleAdornment.Color = BrickColor.White()
+            BoxHandleAdornment.Parent = Holder
+        end
+
+        local BillboardGui = Instance.new("BillboardGui")
+        BillboardGui.Name = TargetPlayer.Name
+        BillboardGui.Adornee = TargetCharacter.Head
+        BillboardGui.Size = UDim2.new(0, 100, 0, 150)
+        BillboardGui.StudsOffset = Vector3.new(0, 1, 0)
+        BillboardGui.AlwaysOnTop = true
+        BillboardGui.Parent = Holder
+
+        local TextLabel = Instance.new("TextLabel")
+        TextLabel.BackgroundTransparency = 1
+        TextLabel.Position = UDim2.new(0, 0, 0, -50)
+        TextLabel.Size = UDim2.new(0, 100, 0, 100)
+        TextLabel.Font = Enum.Font.SourceSansSemibold
+        TextLabel.TextSize = 20
+        TextLabel.TextColor3 = Color3.new(1, 1, 1)
+        TextLabel.TextStrokeTransparency = 0
+        TextLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+        TextLabel.Text = "未加载"
+        TextLabel.ZIndex = 10
+        TextLabel.Parent = BillboardGui
+
+        TargetPlayer.CharacterAdded:Once(function()
+            if not Flags.ESP.CurrentValue or not Holder.Parent then
+                return
+            end
+
+            if Holder.Parent then
+                Holder:Destroy()
+            end
+
+            ESP(Player)
+        end)
+
+        TargetPlayer.CharacterRemoving:Once(function()
+            Holder:Destroy()
+        end)
+
+        local RenderSteppedConnection: RBXScriptConnection
+        RenderSteppedConnection = RunService.RenderStepped:Connect(function()
+            if not Flags.ESP.CurrentValue then
+                RenderSteppedConnection:Disconnect()
+                return
+            end
+
+            if not Holder.Parent then
+                RenderSteppedConnection:Disconnect()
+                return
+            end
+
+            if not TargetCharacter or not TargetCharacter:FindFirstChildOfClass("Humanoid") or not LocalCharacter or not LocalCharacter:FindFirstChild("Humanoid") then
+                return
+            end
+
+            local Distance = math.floor((LocalCharacter:GetPivot().Position - TargetCharacter:GetPivot().Position).Magnitude)
+            TextLabel.Text = `名称: {TargetPlayer.Name} | 生命值: {math.floor(TargetCharacter.Humanoid.Health)} | 距离: {Distance}`
+        end)
+    end
+
+    Tab:CreateToggle({
+        Name = "🔍 • 无限视野ESP",
+        CurrentValue = false,
+        Flag = "ESP",
+        Callback = function(Value)
+            for _, Object: Folder? in pairs(CoreGui:GetChildren()) do
+                if not Object.Name:find("_ESP") then
+                    continue
+                end
+
+                Object:Destroy()
+            end
+
+            if Value then
+                for _, TargetPlayer in Players:GetPlayers() do
+                    if TargetPlayer == Player then
+                        continue
+                    end
+
+                    ESP(TargetPlayer)
+                end
+            end
+        end,
+    })
+
     Tab:CreateSection("界面")
 
     local CustomThemes = {
         BlackHistoryMonth = {
             TextColor = Color3.fromRGB(),
-
             Background = Color3.fromRGB(),
             Topbar = Color3.fromRGB(),
             Shadow = Color3.fromRGB(),
-
             NotificationBackground = Color3.fromRGB(),
             NotificationActionsBackground = Color3.fromRGB(),
-
             TabBackground = Color3.fromRGB(),
             TabStroke = Color3.fromRGB(),
             TabBackgroundSelected = Color3.fromRGB(),
             TabTextColor = Color3.fromRGB(),
             SelectedTabTextColor = Color3.fromRGB(),
-
             ElementBackground = Color3.fromRGB(),
             ElementBackgroundHover = Color3.fromRGB(),
             SecondaryElementBackground = Color3.fromRGB(),
             ElementStroke = Color3.fromRGB(),
             SecondaryElementStroke = Color3.fromRGB(),
-
             SliderBackground = Color3.fromRGB(),
             SliderProgress = Color3.fromRGB(),
             SliderStroke = Color3.fromRGB(),
-
             ToggleBackground = Color3.fromRGB(),
             ToggleEnabled = Color3.fromRGB(),
             ToggleDisabled = Color3.fromRGB(),
@@ -656,10 +766,8 @@ function CreateUniversalTabs()
             ToggleDisabledStroke = Color3.fromRGB(),
             ToggleEnabledOuterStroke = Color3.fromRGB(),
             ToggleDisabledOuterStroke = Color3.fromRGB(),
-
             DropdownSelected = Color3.fromRGB(),
             DropdownUnselected = Color3.fromRGB(),
-
             InputBackground = Color3.fromRGB(),
             InputStroke = Color3.fromRGB(),
             PlaceholderColor = Color3.fromRGB()
@@ -670,7 +778,7 @@ function CreateUniversalTabs()
 
     Tab:CreateDropdown({
         Name = "🖼 • 更改主题",
-        Options = {"BlackHistoryMonth", "Default", "Dark", "AmberGlow", "Amethyst", "Ocean", "Light", "Bloom", "Green", "Serenity"},
+        Options = {"黑人历史月", "默认", "暗黑", "琥珀光", "紫晶", "海洋", "明亮", "绽放", "绿色", "宁静"},
         MultipleOptions = false,
         Flag = "Theme",
         Callback = function(CurrentOption)
@@ -680,7 +788,20 @@ function CreateUniversalTabs()
                 return
             end
 
-            Window.ModifyTheme(CustomThemes[CurrentOption] or CurrentOption)
+            local themeMap = {
+                ["黑人历史月"] = "BlackHistoryMonth",
+                ["默认"] = "Default",
+                ["暗黑"] = "Dark",
+                ["琥珀光"] = "AmberGlow",
+                ["紫晶"] = "Amethyst",
+                ["海洋"] = "Ocean",
+                ["明亮"] = "Light",
+                ["绽放"] = "Bloom",
+                ["绿色"] = "Green",
+                ["宁静"] = "Serenity"
+            }
+
+            Window.ModifyTheme(CustomThemes[themeMap[CurrentOption]] or themeMap[CurrentOption])
         end,
     })
 
@@ -705,7 +826,7 @@ function CreateUniversalTabs()
         end
     end)
 
-    Notify("欢迎使用 FrostByte", `加载完成，耗时 {math.floor((tick() - StartLoadTime) * 10) / 10} 秒`, "loader-circle")
+    Notify("欢迎使用FrostByte", `加载完成，用时 {math.floor((tick() - StartLoadTime) * 10) / 10}秒`, "loader-circle")
 end
 
 getgenv().CreateUniversalTabs = CreateUniversalTabs
