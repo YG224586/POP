@@ -303,7 +303,7 @@ function CreateUniversalTabs()
     Tab:CreateSection("防挂机")
 
     Tab:CreateToggle({
-        Name = "🔒 • 防止AFK断开连接",
+        Name = "🔒 • 防止挂机断开连接",
         CurrentValue = true,
         Flag = "AntiAFK",
         Callback = function()end,
@@ -402,7 +402,7 @@ function CreateUniversalTabs()
     end), "WalkSpeedCharacterAdded")
 
     Tab:CreateToggle({
-        Name = "⚡ • 启用移动速度修改器",
+        Name = "⚡ • 启用移动速度修改",
         CurrentValue = false,
         Flag = "WalkSpeedChanger",
         Callback = function(Value)
@@ -597,7 +597,7 @@ function CreateUniversalTabs()
     Tab:CreateDivider()
 
     Tab:CreateToggle({
-        Name = "🌀 • 无碰撞模式",
+        Name = "🌀 • 无碰撞",
         CurrentValue = false,
         Flag = "Noclip",
         Callback = function(Value)
