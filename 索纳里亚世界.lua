@@ -168,15 +168,21 @@ Tab:CreateToggle({
 })
 
 local ResourceNameMap = {
+    ["SkullTier1"] = "龙骨1",
+    ["SkullTier2"] = "龙骨2",
+    ["SkullTier3"] = "龙骨3",
+    ["SkullTier4"] = "龙骨4",
     ["MossPile"] = "苔藓堆",
     ["MossPileLarge"] = "大苔藓堆",
     ["Log"] = "日志"
 }
+
 local function GetResourcesTable()
     local DroppedResources = {}
 
     for _, Resource: PVInstance in Interactions.DroppedResources:GetChildren() do
-        table.insert(DroppedResources, Resource.Name)
+        local displayName = ResourceNameMap[Resource.Name] or Resource.Name
+        table.insert(DroppedResources, displayName)
     end
 
     return DroppedResources
@@ -195,7 +201,16 @@ ResourcesDropdown = Tab:CreateDropdown({
             return
         end
 
-        local Resource = Interactions.DroppedResources:FindFirstChild(CurrentOption)
+        local englishName
+        for key, value in pairs(ResourceNameMap) do
+            if value == CurrentOption then
+                englishName = key
+                break
+            end
+        end
+        englishName = englishName or CurrentOption
+
+        local Resource = Interactions.DroppedResources:FindFirstChild(englishName)
 
         if not Resource then
             return
