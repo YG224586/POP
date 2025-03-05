@@ -1,28 +1,10 @@
-local getgenv: () -> ({[string]: any}) = getfenv().getgenv
-
 getgenv().ScriptVersion = "v1.0.9"
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/YG224586/POP/refs/heads/main/core.lua"))()
 
-type Tab = {
-    CreateSection: (self: Tab, Name: string) -> Section,
-    CreateDivider: (self: Tab) -> Divider,
-}
-
-local ApplyUnsupportedName: (Name: string, Condition: boolean) -> (string) = getgenv().ApplyUnsupportedName
-local HandleConnection: (Connection: RBXScriptConnection, Name: string) -> () = getgenv().HandleConnection
-local Notify: (Title: string, Content: string, Image: string) -> () = getgenv().Notify
-local GetClosestChild: (Children: {PVInstance}, Callback: (Child: PVInstance) -> boolean) -> (PVInstance?) = getgenv().GetClosestChild
-
 local Remotes: Folder & {[string]: RemoteEvent & RemoteFunction} = game:GetService("ReplicatedStorage").Remotes
 
 local Interactions: Folder = workspace:WaitForChild("Interactions")
-
-local Flags: {[string]: {["CurrentValue"]: any, ["CurrentOption"]: {string}}} = getgenv().Flags
-
-local Player = game:GetService("Players").LocalPlayer
-
-local Window = getgenv().Window
 
 if not Window then
     return
@@ -169,7 +151,8 @@ Tab:CreateToggle({
 
 local ResourceNameMap = {
     ["MossPile"] = "苔藓堆",
-    ["MossPileLarge"] = "大苔藓堆"
+    ["MossPileLarge"] = "大苔藓堆",
+    ["Log"] = "日志",   
 }
 local function GetResourcesTable()
     local DroppedResources = {}
