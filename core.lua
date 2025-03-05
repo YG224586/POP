@@ -303,7 +303,7 @@ function CreateUniversalTabs()
     Tab:CreateSection("防挂机")
 
     Tab:CreateToggle({
-        Name = "🔒 • 防止挂机断开连接",
+        Name = "🔒 • 防止挂机时断开连接",
         CurrentValue = true,
         Flag = "AntiAFK",
         Callback = function()end,
@@ -341,7 +341,7 @@ function CreateUniversalTabs()
     local PreviousValue
 
     Tab:CreateToggle({
-        Name = ApplyUnsupportedName("⬜ • 切出游戏时禁用3D渲染", isrbxactive),
+        Name = ApplyUnsupportedName("⬜ • 退出游戏时禁用3D渲染", isrbxactive),
         CurrentValue = false,
         Flag = "Rendering",
         Callback = function(Value)
