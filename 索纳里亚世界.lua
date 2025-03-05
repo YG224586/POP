@@ -167,11 +167,9 @@ Tab:CreateToggle({
     end,
 })
 
+-- ... 前面的代码保持不变 ...
+
 local ResourceNameMap = {
-    ["SkullTier1"] = "龙骨1",
-    ["SkullTier2"] = "龙骨2",
-    ["SkullTier3"] = "龙骨3",
-    ["SkullTier4"] = "龙骨4",
     ["MossPile"] = "苔藓堆",
     ["MossPileLarge"] = "大苔藓堆",
     ["Log"] = "日志"
