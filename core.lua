@@ -39,20 +39,12 @@ end
 getgenv().HandleConnection = HandleConnection
 
 getgenv().GetClosestChild = function(Children: {PVInstance}, Callback: ((Child: PVInstance) -> boolean)?, MaxDistance: number?)
-    for i, Child in Children do
-        if Callback and not Callback(Child) then
-            continue
-        end
-
-        table.remove(Children, i)
-    end
-
+   
     local Character = Player.Character
 
-    if not Character then
+    if not Character then    
         return
-    end
-
+    end    
     local HumanoidRootPart: Part = Character:FindFirstChild("HumanoidRootPart")
 
     if not HumanoidRootPart then
@@ -65,6 +57,14 @@ getgenv().GetClosestChild = function(Children: {PVInstance}, Callback: ((Child: 
     local ClosestChild
 
     for _, Child in Children do
+    if not Child:IsA("PVInstance") then 
+            continue 
+        end
+        
+                        if Callback and Callback(Child) then
+                        continue
+                end
+        
         local Magnitude = (Child:GetPivot().Position - CurrentPosition).Magnitude
 
         if Magnitude < ClosestMagnitude then
@@ -608,7 +608,7 @@ function CreateUniversalTabs()
             end
 
             for _, Part: Part in Character:GetChildren() do
-                if not Part:IsA("BasePart") then
+                if not Part:IsA("PVInstance") then
                     continue
                 end
 
@@ -637,17 +637,18 @@ function CreateUniversalTabs()
         Holder.Name = FolderName
         Holder.Parent = CoreGui
 
-        for _, Part: Part in TargetCharacter:GetChildren() do
-            if not Part:IsA("BasePart") then
+                for _, Object: BasePart | Model in TargetCharacter:GetChildren() do
+                        if not Object:IsA("PVInstance") then
+
                 continue
             end
 
             local BoxHandleAdornment = Instance.new("BoxHandleAdornment")
             BoxHandleAdornment.Name = TargetPlayer.Name
-            BoxHandleAdornment.Adornee = Part
+            BoxHandleAdornment.Adornee = Object
             BoxHandleAdornment.AlwaysOnTop = true
             BoxHandleAdornment.ZIndex = 10
-            BoxHandleAdornment.Size = Part.Size
+            BoxHandleAdornment.Size = if Object:IsA("BasePart") then Object.Size else Object:GetExtentsSize()
             BoxHandleAdornment.Transparency = 0.5
             BoxHandleAdornment.Color = BrickColor.White()
             BoxHandleAdornment.Parent = Holder
@@ -655,7 +656,7 @@ function CreateUniversalTabs()
 
         local BillboardGui = Instance.new("BillboardGui")
         BillboardGui.Name = TargetPlayer.Name
-        BillboardGui.Adornee = TargetCharacter:FindFirstChild("Head") or TargetCharacter:FindFirstChildWhichIsA("BasePart")
+        BillboardGui.Adornee = TargetCharacter:FindFirstChild("Head") or TargetCharacter:FindFirstChildWhichIsA("PVInstance")
         BillboardGui.Size = UDim2.new(0, 100, 0, 150)
         BillboardGui.StudsOffset = Vector3.new(0, 1, 0)
         BillboardGui.AlwaysOnTop = true
@@ -716,7 +717,7 @@ function CreateUniversalTabs()
         CurrentValue = false,
         Flag = "ESP",
         Callback = function(Value)
-            for _, Object: Folder? in pairs(CoreGui:GetChildren()) do
+            for _, Object: Folder? in CoreGui:GetChildren() do
                 if not Object.Name:find("_ESP") then
                     continue
                 end
@@ -724,14 +725,17 @@ function CreateUniversalTabs()
                 Object:Destroy()
             end
 
-            if Value then
-                for _, TargetPlayer in Players:GetPlayers() do
-                    if TargetPlayer == Player then
-                        continue
-                    end
+                        if not Value then
+                                return
+                        end
 
-                    ESP(TargetPlayer)
+                        for _, TargetPlayer in Players:GetPlayers() do
+                                if TargetPlayer == Player then
+                                        continue
+
                 end
+                                                ESP(TargetPlayer)
+                                                
             end
         end,
     })
